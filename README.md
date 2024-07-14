@@ -1,4 +1,4 @@
-# DBS_lead_seg
+# DBS_lead_segmentation
 Tool to segment Deep Brain Stimulation leads without artifacts on CT scans and register to MNI152 1mm space.
 
 The input CT scan MUST be in .nii.gz file format.
