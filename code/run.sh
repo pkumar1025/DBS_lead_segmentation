@@ -54,5 +54,14 @@ if [ ! -z "$THRESHOLD" ]; then
     python threshold.py "$MNI152_skull" "$THRESHOLD"
 fi
 
-echo "Process completed."
+echo "Threshold process completed."
 
+MNI152_skull_thresholded=$(find "$input_dir" -maxdepth 1 -name "*MNI15_skull_thresholded.nii.gz" -print -quit)
+
+if [ -z "$MNI152_skull_thresholded" ]; then
+    echo "Error: No NIfTI file ending with MNI_15_skull_thresholded found in the current directory."
+    exit 1
+fi
+
+# Run the atlas.py script on the input file
+python3 atlas.py "$MNI152_skull_thresholded" "$output_dir"
