@@ -23,7 +23,7 @@ def create_mask_and_compare_atlas(input_nifti_path):
         atlas_data = atlas_img.get_fdata()
 
     # Find overlapping regions
-    overlapping_regions = np.unique(atlas_data[mask == 1])
+    overlapping_regions = np.unique(atlas_data[mask == 1]).astype(int)
 
     # Create a dataframe of overlapping regions
     overlap_df = pd.DataFrame({
@@ -38,9 +38,9 @@ def create_mask_and_compare_atlas(input_nifti_path):
     return overlap_df
 
 # Example usage
-input_nifti_path = '/path/to/your/mni152_space_image.nii.gz'
+input_nifti_path = '/Users/Prane/Documents/GitHub/DBS_lead_segmentation/code/leads/postop_ct.nii'
 result = create_mask_and_compare_atlas(input_nifti_path)
 print(result)
 
 # Optionally, save to CSV
-# result.to_csv('atlas_overlap_results.csv', index=False)
+result.to_csv('atlas_overlap_results.csv', index=False)

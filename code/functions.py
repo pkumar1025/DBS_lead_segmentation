@@ -57,9 +57,9 @@ def process_image(img_path):
     nib.save(new_image, os.path.join(output_dir, f'{name}_sobel_thresholded_nonzero.nii'))
 
 if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print("Usage: python script.py <path_to_nifti_image>")
-        sys.exit(1)
+    # if len(sys.argv) != 2:
+    #     print("Usage: python script.py <path_to_nifti_image>")
+    #     sys.exit(1)
     
-    img_path = sys.argv[1]
+    img_path = '/Users/Prane/Documents/GitHub/DBS_lead_segmentation/code/leads/postop_ct.nii'
     process_image(img_path)

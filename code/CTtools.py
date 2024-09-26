@@ -284,5 +284,5 @@ def display_nifti_histogram(nifti_path):
     plt.show()
 
 # Example usage:
-# display_nifti_histogram('/path/to/your/nifti/file.nii.gz')
+display_nifti_histogram('/Users/Prane/Documents/GitHub/DBS_lead_segmentation/code/leads/postop_ct.nii')
 

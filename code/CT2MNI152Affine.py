@@ -12,16 +12,14 @@ from subprocess import call
 import sys
 import SimpleITK as sitk
 
+# if len(sys.argv) < 2:
+#     print("Usage: python CT2MNI152Affine.py <path_to_ct_scan>")
+#     sys.exit(1)
 
-
-ct_scan_path = str(sys.argv[1])
-
+ct_scan_path = '/Users/Prane/Documents/GitHub/DBS_lead_segmentation/code/leads/postop_ct.nii'
 MNI_152_bone = os.path.join(os.getcwd(),'MNI152_T1_1mm_bone.nii.gz')
-
 MNI_152 = os.path.join(os.getcwd(),'MNI152_T1_1mm.nii.gz')
-
 bspline_path = os.path.join(os.getcwd(), 'Par0000bspline.txt')
-
 nameOfAffineMatrix = ct_scan_path[:ct_scan_path.find('.nii.gz')]+'_affine.mat'
 
 print('The location of MNI152 bone:' , MNI_152_bone)
