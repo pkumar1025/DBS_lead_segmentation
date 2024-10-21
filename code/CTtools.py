@@ -12,6 +12,7 @@ from skimage.filters import threshold_otsu
 from skimage import measure
 from scipy import ndimage
 from skimage import exposure
+import os
 
 def bone_extracted(ct_img_path):
     """Extract the bone of the CT scan based on the hard thresholding on pixel value"""
@@ -43,45 +44,38 @@ def bone_extracted(ct_img_path):
 
     #b = -1024.0
 
+    #HU stands for Hounsfield Unit
     #bone_HU = 500.0
 
     #bone_pixel = (bone_HU-b)/m
     
     bone_pixel = 500
+    bone_mask = ct_nda >= bone_pixel
 
-    for z in range(ct_nda.shape[0]):
-        for x in range(ct_nda.shape[1]):
-            for y in range(ct_nda.shape[2]):
-                if ct_nda[z, x, y] >= bone_pixel:
-                    output_ct_nda[z, x, y] = ct_nda[z, x, y]
-                    bone_mask_nda[z, x, y] = 1.0;
+    output_ct_nda[bone_mask] = ct_nda[bone_mask]
+    bone_mask_nda[bone_mask] = 1.0
 
+    #Output ct_image
     output_ct_image = sitk.GetImageFromArray(output_ct_nda)
-
-    
-
     output_ct_image_name = ct_img_path[:ct_img_path.find('.nii.gz')]+'_skull.nii.gz'
-    
-    print('The name of the output skull image: ', output_ct_image_name)
-    
     output_ct_image.CopyInformation(ct_img)
     
+    print('The name of the output skull image: ', output_ct_image_name)
+
     sitk.WriteImage(output_ct_image, output_ct_image_name)
+
+    #Bone_mask
+    bone_mask_image = sitk.GetImageFromArray(bone_mask_nda)
+    bone_mask_image_name = ct_img_path[:ct_img_path.find('.nii.gz')]+'_skullMask.nii.gz'
+    bone_mask_image.CopyInformation(ct_img)
+
+    print('The name of the output skull mask image: ', bone_mask_image_name)
+
+    sitk.WriteImage(bone_mask_image, bone_mask_image_name)
     
-    return output_ct_image_name   
+    return output_ct_image_name, bone_mask_image_name  
 
-    # bone_mask 
-    #bone_mask_image = sitk.GetImageFromArray(bone_mask_nda)
 
-    #bone_mask_image_name = ct_img_path[:ct_img_path.find('.nii.gz')]+'_skullMask.nii.gz'
-    
-    # bone_mask_image.CopyInformation(ct_img)
-
-    #print 'The name of the output skull mask image: ', bone_mask_image_name
-
-    #sitk.WriteImage(bone_mask_image, bone_mask_image_name)
-
-    #return output_ct_image_name, bone_mask_image_name
 
 def getMaximum3DRegion(binary):
     """ Get the Maximum 3D region from 3D multiple bindary Regions"""
@@ -224,22 +218,18 @@ def removeCTscandevice(ct_img_path):
     output_ct_image_name = ct_img_path[:ct_img_path.find('.nii.gz')]+'_woCTdevice.nii.gz'
     
     sitk.WriteImage(output_ct_image, output_ct_image_name)        
-    
-    
-    return output_ct_image_name
 
     # The mask for CT device
     
-    #woCTdevice_mask_image = sitk.GetImageFromArray(new_max_binary)
+    woCTdevice_mask_image = sitk.GetImageFromArray(new_max_binary)
     
-    #woCTdevice_mask_image.CopyInformation(ct_img)
+    woCTdevice_mask_image.CopyInformation(ct_img)
     
-    #woCTdevice_mask_image_name = ct_img_path[:ct_img_path.find('.nii.gz')]+'_woCTdeviceMask.nii.gz'
+    woCTdevice_mask_image_name = ct_img_path[:ct_img_path.find('.nii.gz')]+'_woCTdeviceMask.nii.gz'
      
-    #sitk.WriteImage(woCTdevice_mask_image, woCTdevice_mask_image_name)
+    sitk.WriteImage(woCTdevice_mask_image, woCTdevice_mask_image_name)
        
-    #return output_ct_image_name, woCTdevice_mask_image_name
-
+    return output_ct_image_name, woCTdevice_mask_image_name
 
 
 def contrastStretch(ct_img_path, percent = (10,90)):
@@ -254,9 +244,40 @@ def contrastStretch(ct_img_path, percent = (10,90)):
     sitk.WriteImage(ct_img_cs, output_ct_name)
     return output_ct_name
 
+
+
 import nibabel as nib
 import matplotlib.pyplot as plt
 import numpy as np
+
+def display_nifti_images(nifti_path):
+    original_image_data = nib.load(nifti_path).get_fdata()
+    bone_extracted_data = nib.load(bone_extracted(nifti_path)[0]).get_fdata()
+    bone_mask_data = nib.load(bone_extracted(nifti_path)[1]).get_fdata()
+
+    # Choose a slice to visualize (e.g., the middle slice along the z-axis)
+    slice_index = original_image_data.shape[2] // 2
+
+    # Display the original image slice
+    plt.figure(figsize=(12, 6))
+    plt.subplot(1, 3, 1)
+    plt.imshow(original_image_data[:, :, slice_index], cmap='gray')
+    plt.title('Original CT Scan')
+    plt.axis('off')
+
+    # Display the bone-extracted image slice
+    plt.subplot(1, 3, 2)
+    plt.imshow(bone_extracted_data[:, :, slice_index], cmap='gray')
+    plt.title('Bone Extracted CT Scan')
+    plt.axis('off')
+
+    plt.subplot(1, 3, 3)
+    plt.imshow(bone_mask_data[:, :, slice_index], cmap='gray')
+    plt.title('Bone Mask')
+    plt.axis('off')
+
+    # Show both images
+    plt.show()
 
 def display_nifti_histogram(nifti_path):
     # Load the NIfTI file
@@ -284,5 +305,16 @@ def display_nifti_histogram(nifti_path):
     plt.show()
 
 # Example usage:
-display_nifti_histogram('/Users/Prane/Documents/GitHub/DBS_lead_segmentation/code/leads/postop_ct.nii')
+    
+nifti_path_sample = os.path.join(os.getcwd(), 'code', 'leads', 'postop_ct.nii')
+# display_nifti_images(nifti_path_sample)
+
+# #Display nifti histogram for original image
+# display_nifti_histogram(nifti_path_sample)
+
+# #Display nifti histogram for image with bone extracted
+# display_nifti_histogram(bone_extracted(nifti_path_sample)[0])
+
+display_nifti_images(removeCTscandevice(nifti_path_sample)[0])
+
 

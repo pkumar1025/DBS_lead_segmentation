@@ -2,6 +2,9 @@ import nibabel as nib
 import numpy as np
 from nilearn import datasets, image
 import pandas as pd
+import matplotlib as plt
+import os
+
 
 def create_mask_and_compare_atlas(input_nifti_path):
     # Load the input NIfTI file
@@ -38,7 +41,7 @@ def create_mask_and_compare_atlas(input_nifti_path):
     return overlap_df
 
 # Example usage
-input_nifti_path = '/Users/Prane/Documents/GitHub/DBS_lead_segmentation/code/leads/postop_ct.nii'
+input_nifti_path = os.path.join(os.getcwd(), 'code', 'leads', 'postop_ct.nii')
 result = create_mask_and_compare_atlas(input_nifti_path)
 print(result)
 
