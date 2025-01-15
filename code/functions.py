@@ -52,9 +52,14 @@ def process_image(img_path):
     threshold2 = np.mean(nonzero_sobel) + 3*np.std(nonzero_sobel)
     result = (normalized_sobel > threshold2) * normalized_sobel
     new_image = nib.Nifti1Image(result, affine=np.eye(4))
-    output_dir = '/Users/Prane/Documents/GitHub/DBS_lead_segmentation/code/leads'
+    output_dir = '/data/morrison/wip/radhika/parkinsons/rough_segmentations/testrun1/'
+    os.makedirs(output_dir, exist_ok=True)
     nib.save(new_image, os.path.join(output_dir, f'{name}_sobel_thresholded_nonzero.nii'))
 
 if __name__ == "__main__":
-    img_path = '/Users/Prane/Documents/GitHub/DBS_lead_segmentation/code/leads/postop_ct.nii'
+    if len(sys.argv) != 2:
+        print("Usage: python script.py <path_to_nifti_image>")
+        sys.exit(1)
+    
+    img_path = sys.argv[1]
     process_image(img_path)

@@ -51,7 +51,7 @@ read -p "Enter threshold value (or press enter to skip thresholding): " THRESHOL
 
 # If threshold is provided, run the Python script again with the threshold
 if [ ! -z "$THRESHOLD" ]; then
-    python threshold.py "$MNI152_skull" "$THRESHOLD"
+    python3 threshold.py "$MNI152_skull" "$THRESHOLD"
 fi
 
 echo "Threshold process completed."

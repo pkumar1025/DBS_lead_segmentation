@@ -1,10 +1,8 @@
 import nibabel as nib
 import numpy as np
 from nilearn import datasets, image
+import sys
 import pandas as pd
-import matplotlib as plt
-import os
-
 
 def create_mask_and_compare_atlas(input_nifti_path):
     # Load the input NIfTI file
@@ -13,6 +11,10 @@ def create_mask_and_compare_atlas(input_nifti_path):
 
     # Create binary mask of non-zero intensities
     mask = (data != 0).astype(int)
+    
+    # Save the mask as a NIfTI file
+    mask_img = nib.Nifti1Image(mask.astype(np.uint8), affine=img.affine)
+    nib.save(mask_img, 'binary_mask.nii.gz')
 
     # Example - Load Harvard-Oxford atlas (You might need to modify this based on which atlas space you want to use)
     atlas = datasets.fetch_atlas_harvard_oxford('cort-maxprob-thr25-2mm')
@@ -41,7 +43,7 @@ def create_mask_and_compare_atlas(input_nifti_path):
     return overlap_df
 
 # Example usage
-input_nifti_path = os.path.join(os.getcwd(), 'code', 'leads', 'postop_ct.nii')
+input_nifti_path = str(sys.argv[1])
 result = create_mask_and_compare_atlas(input_nifti_path)
 print(result)
 

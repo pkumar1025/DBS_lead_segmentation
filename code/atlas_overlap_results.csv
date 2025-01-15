@@ -1,0 +1,32 @@
+Region ID,Region Name,Overlap Voxel Count
+0,Background,424543
+1,Frontal Pole,11285
+23,"Lateral Occipital Cortex, inferior division",3795
+22,"Lateral Occipital Cortex, superior division",3787
+48,Occipital Pole,3129
+7,Precentral Gyrus,2502
+8,Temporal Pole,1954
+17,Postcentral Gyrus,1772
+4,Middle Frontal Gyrus,1762
+12,"Middle Temporal Gyrus, posterior division",1733
+33,Frontal Orbital Cortex,1331
+13,"Middle Temporal Gyrus, temporooccipital part",1235
+5,"Inferior Frontal Gyrus, pars triangularis",1010
+14,"Inferior Temporal Gyrus, anterior division",1006
+15,"Inferior Temporal Gyrus, posterior division",923
+10,"Superior Temporal Gyrus, posterior division",855
+21,Angular Gyrus,832
+19,"Supramarginal Gyrus, anterior division",816
+20,"Supramarginal Gyrus, posterior division",764
+11,"Middle Temporal Gyrus, anterior division",685
+38,"Temporal Fusiform Cortex, posterior division",642
+3,Superior Frontal Gyrus,610
+6,"Inferior Frontal Gyrus, pars opercularis",301
+37,"Temporal Fusiform Cortex, anterior division",283
+25,Frontal Medial Cortex,278
+16,"Inferior Temporal Gyrus, temporooccipital part",144
+18,Superior Parietal Lobule,126
+9,"Superior Temporal Gyrus, anterior division",109
+34,"Parahippocampal Gyrus, anterior division",86
+27,Subcallosal Cortex,28
+35,"Parahippocampal Gyrus, posterior division",14
